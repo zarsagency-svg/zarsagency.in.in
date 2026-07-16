@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZarsAgency — Influencer Marketing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --obsidian: #0A0A0F;
+      --deep: #10101A;
+      --surface: #16162A;
+      --violet: #7C3AED;
+      --violet-light: #A78BFA;
+      --gold: #F59E0B;
+      --gold-light: #FCD34D;
+      --text: #F8F7FF;
+      --muted: #8B8BA7;
+      --border: rgba(124,58,237,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--obsidian);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--obsidian); }
+    ::-webkit-scrollbar-thumb { background: var(--violet); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 60px;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--violet); }
+
+    .nav-links {
+      display: flex; gap: 40px; list-style: none; align-items: center;
+    }
+    /* FIX 2: Use a data-active attribute on links instead of inline style so nav-cta is never overridden */
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    .nav-cta {
+      background: var(--violet) !important;
+      color: #fff !important;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 0.875rem !important;
+      font-weight: 600 !important;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover,
+    .nav-cta.active { background: #6D28D9 !important; color: #fff !important; transform: translateY(-1px); }
+
+    /* FIX 7: Hamburger menu for mobile */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,15,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--violet-light); }
+    .mobile-menu .mobile-cta {
+      background: var(--violet);
+      color: #fff !important;
+      padding: 14px 40px;
+      border-radius: 100px;
+      font-size: 1.1rem !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      /* FIX 9: explicit padding that won't be overridden by section rule */
+      padding: 120px 40px 80px !important;
+      position: relative; overflow: hidden;
+    }
+
+    /* Orb background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, rgba(245,158,11,0.08) 50%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      top: 20%; right: 10%;
+      background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: drift 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-40px) translateX(-20px); }
+    }
+
+    /* FIX 3: All hero direct children need z-index > 0 so orb pseudo-elements don't block them */
+    .hero > * { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--violet-light);
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--text);
+      max-width: 900px;
+      margin-bottom: 28px;
+    }
+    .hero-title .accent { color: var(--violet-light); }
+    .hero-title .gold { color: var(--gold); }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .hero-btns {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--violet);
+      color: #fff;
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover {
+      background: #6D28D9;
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(124,58,237,0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-block;
+      border: 1px solid rgba(124,58,237,0.35);
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--violet); background: rgba(124,58,237,0.06); transform: translateY(-2px); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 80px;
+      width: 100%;
+      max-width: 860px;
+      /* FIX 1: stats are in the viewport on load — no fade-up needed; just show them */
+    }
+
+    .stat-item {
+      background: var(--obsidian);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-num span { color: var(--gold); }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+
+    .marquee-track {
+      display: flex; gap: 60px;
+      width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+    /* Pause on hover for accessibility */
+    .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .marquee-item .sep { color: var(--gold); font-size: 1rem; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 110px 60px; }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--violet-light);
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.75;
+    }
+
+    /* ── SERVICES ── */
+    .services { background: var(--deep); }
+
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px; flex-wrap: wrap; gap: 24px;
+    }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      background: var(--border);
+    }
+
+    .service-card {
+      background: var(--deep);
+      padding: 48px 40px;
+      transition: background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--gold));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { background: var(--surface); }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 28px;
+      flex-shrink: 0;
+    }
+
+    .service-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── PROCESS ── */
+    .process { background: var(--obsidian); }
+
+    .process-header { text-align: center; margin-bottom: 72px; }
+    .process-header .section-sub { margin: 0 auto; }
+
+    .process-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+      position: relative;
+    }
+    /* FIX 8: connector line top = half of step-num height (72px / 2 = 36px) which is correct,
+       but the grid items have padding: 0 24px, so the line needs to account for that.
+       Use 36px from the top of process-grid itself. */
+    .process-grid::before {
+      content: '';
+      position: absolute; top: 36px; left: 12.5%; right: 12.5%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--violet), var(--gold), var(--violet), transparent);
+      z-index: 0;
+    }
+
+    .process-step { text-align: center; padding: 0 24px; position: relative; z-index: 1; }
+
+    .step-num {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--violet-light);
+      margin: 0 auto 28px;
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── CASE STUDIES ── */
+    .cases { background: var(--deep); }
+
+    .cases-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 56px; flex-wrap: wrap; gap: 24px;
+    }
+
+    .cases-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+    }
+
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .case-card:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.4); }
+
+    .case-thumb {
+      height: 220px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      position: relative; overflow: hidden;
+      /* FIX 5: ensure emoji stays in place */
+      flex-shrink: 0;
+    }
+    .case-thumb-1 { background: linear-gradient(135deg, #1a0533, #2d1b69, #7C3AED); }
+    .case-thumb-2 { background: linear-gradient(135deg, #1a1000, #4a2e00, #F59E0B); }
+    .case-thumb-3 { background: linear-gradient(135deg, #001a1a, #004d4d, #10b981); }
+    .case-thumb-4 { background: linear-gradient(135deg, #1a0020, #5b0060, #ec4899); }
+
+    .case-thumb-label {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: 100px;
+      color: rgba(255,255,255,0.9);
+      /* make sure it sits above emoji */
+      z-index: 1;
+    }
+
+    .case-body { padding: 32px; flex: 1; display: flex; flex-direction: column; }
+
+    .case-tags {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      color: var(--violet-light);
+    }
+
+    .case-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .case-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 24px; flex: 1; }
+
+    .case-metrics {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: auto;
+    }
+    .metric-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+    .metric-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--obsidian); }
+
+    .test-header { text-align: center; margin-bottom: 64px; }
+
+    .test-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .test-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px;
+      transition: border-color 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .test-card:hover { border-color: rgba(124,58,237,0.35); }
+
+    .stars { color: var(--gold); font-size: 1rem; margin-bottom: 20px; letter-spacing: 2px; }
+
+    .test-quote {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(248,247,255,0.85);
+      margin-bottom: 28px;
+      font-style: italic;
+      flex: 1;
+    }
+
+    .test-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .av-1 { background: linear-gradient(135deg, var(--violet), #a855f7); }
+    .av-2 { background: linear-gradient(135deg, var(--gold), #f97316); }
+    .av-3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+
+    .author-name { font-weight: 600; font-size: 0.9rem; }
+    .author-role { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── CTA ── */
+    /* FIX 4: CTA section fully centered */
+    .cta-section {
+      background: var(--deep);
+      text-align: center;
+      padding: 120px 60px;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .cta-section > * { position: relative; z-index: 1; }
+    .cta-section .section-title { font-size: clamp(2.2rem, 4.5vw, 3.6rem); max-width: 700px; text-align: center; }
+    .cta-section .section-sub { text-align: center; margin: 0 0 48px; max-width: 520px; }
+
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--obsidian);
+      border-top: 1px solid var(--border);
+      padding: 60px;
+    }
+
+    .footer-inner {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    }
+
+    .footer-brand .nav-logo { font-size: 1.6rem; display: block; margin-bottom: 16px; }
+    /* FIX 6: footer brand text should be muted */
+    .footer-brand p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; max-width: 260px; }
+
+    .footer-col h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a {
+      text-decoration: none;
+      font-size: 0.9rem;
+      color: rgba(248,247,255,0.55);
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--text); }
+
+    .footer-bottom {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 0.8rem; color: var(--muted); }
+    .footer-socials { display: flex; gap: 16px; }
+    .social-link {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: var(--muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--violet); color: var(--violet-light); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 18px 32px; }
+      section { padding: 80px 32px; }
+      .hero { padding: 100px 32px 70px !important; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+      .process-grid::before { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 90px 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      nav { padding: 16px 24px; }
+      section { padding: 70px 24px; }
+      .hero { padding: 100px 24px 60px !important; }
+      .stats-strip { grid-template-columns: repeat(2, 1fr); }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-grid { grid-template-columns: 1fr; gap: 40px; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .test-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      footer { padding: 48px 24px; }
+      .cta-section { padding: 80px 24px !important; }
+      .services-header { flex-direction: column; align-items: flex-start; }
+      .cases-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .fade-up { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#home" class="nav-logo">Zars<span>Agency</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+    <!-- FIX 7: Hamburger button for mobile -->
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+    <a href="#services" class="mobile-link">Services</a>
+    <a href="#work" class="mobile-link">Work</a>
+    <a href="#process" class="mobile-link">Process</a>
+    <a href="#testimonials" class="mobile-link">Clients</a>
+    <a href="#contact" class="mobile-link mobile-cta">Get Started</a>
+  </div>
+
+  <!-- HERO -->
+  <!-- FIX 1: removed fade-up from stat-items inside hero (already in viewport); hero > * gets z-index via CSS -->
+  <section class="hero" id="home">
+    <div class="hero-eyebrow"><span class="dot"></span> Influencer Marketing Agency</div>
+    <h1 class="hero-title">
+      We Turn <span class="accent">Influence</span><br/>
+      Into <span class="gold">Revenue</span>
+    </h1>
+    <p class="hero-sub">ZarsAgency connects brands with the right creators to build authentic campaigns that drive real results — not just impressions.</p>
+    <div class="hero-btns">
+      <a href="#work" class="btn-primary">See Our Work</a>
+      <a href="#contact" class="btn-outline">Book a Strategy Call</a>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-num">340<span>M+</span></div>
+        <div class="stat-label">Total Reach Delivered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8.2<span>x</span></div>
+        <div class="stat-label">Avg. ROAS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">120<span>+</span></div>
+        <div class="stat-label">Campaigns Launched</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98<span>%</span></div>
+        <div class="stat-label">Client Retention</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item">Nike <span class="sep">✦</span></div>
+      <div class="marquee-item">Glossier <span class="sep">✦</span></div>
+      <div class="marquee-item">Gymshark <span class="sep">✦</span></div>
+      <div class="marquee-item">Fenty Beauty <span class="sep">✦</span></div>
+      <div class="marquee-item">Revolve <span class="sep">✦</span></div>
+      <div class="marquee-item">HelloFresh <span class="sep">✦</span></div>
+      <div class="marquee-item">ASOS <span class="sep">✦</span></div>
+      <div class="marquee-item">Bumble <span class="sep">✦</span></div>
+      <div class="marquee-item">Lululemon <span class="sep">✦</span></div>
+      <div class="marquee-item">Warby Parker <span class="sep">✦</span></div>
+      <div class="marquee-item">Nike <span class="sep">✦</span></div>
+      <div class="marquee-item">Glossier <span class="sep">✦</span></div>
+      <div class="marquee-item">Gymshark <span class="sep">✦</span></div>
+      <div class="marquee-item">Fenty Beauty <span class="sep">✦</span></div>
+      <div class="marquee-item">Revolve <span class="sep">✦</span></div>
+      <div class="marquee-item">HelloFresh <span class="sep">✦</span></div>
+      <div class="marquee-item">ASOS <span class="sep">✦</span></div>
+      <div class="marquee-item">Bumble <span class="sep">✦</span></div>
+      <div class="marquee-item">Lululemon <span class="sep">✦</span></div>
+      <div class="marquee-item">Warby Parker <span class="sep">✦</span></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-header">
+      <div>
+        <p class="section-eyebrow">What We Do</p>
+        <h2 class="section-title">Full-Stack Influencer<br/>Marketing Solutions</h2>
+      </div>
+      <p class="section-sub">Every service we offer is built around one goal: connecting your brand to the right audience through voices they actually trust.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <div class="service-icon">🎯</div>
+        <div class="service-title">Creator Discovery &amp; Vetting</div>
+        <p class="service-desc">We go beyond follower counts. Our proprietary scoring evaluates engagement quality, audience demographics, brand affinity, and authenticity signals to find your perfect match.</p>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-icon">📱</div>
+        <div class="service-title">Campaign Strategy &amp; Creative</div>
+        <p class="service-desc">From concept to content brief, we craft campaigns that feel native to each platform — TikTok, Instagram, YouTube, Pinterest — without losing your brand's core message.</p>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-icon">🤝</div>
+        <div class="service-title">Influencer Relationship Management</div>
+        <p class="service-desc">We handle every aspect of the creator partnership — negotiations, contracts, deadlines, approvals — so you stay focused on your business.</p>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-icon">📊</div>
+        <div class="service-title">Performance Analytics</div>
+        <p class="service-desc">Real-time dashboards tracking reach, engagement, conversions, and ROAS. We translate data into decisions that compound results campaign after campaign.</p>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-icon">🌐</div>
+        <div class="service-title">Multi-Platform Amplification</div>
+        <p class="service-desc">We amplify top-performing organic content through paid media to extend its life and multiply its impact across Meta, TikTok Ads, and Google.</p>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-icon">⚡</div>
+        <div class="service-title">Affiliate &amp; Long-Term Partnerships</div>
+        <p class="service-desc">We build long-term brand ambassador programs and performance-based affiliate structures that turn creators into genuine, invested advocates for your brand.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="process-header fade-up">
+      <p class="section-eyebrow">How It Works</p>
+      <h2 class="section-title">From Brief to Breakthrough</h2>
+      <p class="section-sub">A streamlined process designed to move fast and deliver results from week one.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step fade-up">
+        <div class="step-num">01</div>
+        <div class="step-title">Discovery Call</div>
+        <p class="step-desc">We learn your brand, goals, audience, and budget inside-out before recommending a single creator.</p>
+      </div>
+      <div class="process-step fade-up">
+        <div class="step-num">02</div>
+        <div class="step-title">Creator Matching</div>
+        <p class="step-desc">Our team curates a shortlist of vetted creators with real audience alignment and proven track records.</p>
+      </div>
+      <div class="process-step fade-up">
+        <div class="step-num">03</div>
+        <div class="step-title">Campaign Execution</div>
+        <p class="step-desc">We manage briefing, production, approvals, and go-live with precision — no chasing, no delays.</p>
+      </div>
+      <div class="process-step fade-up">
+        <div class="step-num">04</div>
+        <div class="step-title">Optimize &amp; Scale</div>
+        <p class="step-desc">Post-campaign analysis feeds directly into the next round, compounding results with every iteration.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE STUDIES -->
+  <section class="cases" id="work">
+    <div class="cases-header">
+      <div>
+        <p class="section-eyebrow">Case Studies</p>
+        <h2 class="section-title">Work That Speaks<br/>For Itself</h2>
+      </div>
+      <a href="#contact" class="btn-outline">View All Projects</a>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card fade-up">
+        <div class="case-thumb case-thumb-1">
+          👟
+          <span class="case-thumb-label">Fashion &amp; Lifestyle</span>
+        </div>
+        <div class="case-body">
+          <div class="case-tags">
+            <span class="tag">TikTok</span>
+            <span class="tag">Instagram</span>
+            <span class="tag">Micro-Influencers</span>
+          </div>
+          <div class="case-title">Urban Sole — Sneaker Launch Campaign</div>
+          <p class="case-desc">Activated 42 micro-influencers across TikTok and Instagram Reels for a limited-edition sneaker drop, generating waitlists 3x over capacity.</p>
+          <div class="case-metrics">
+            <div><div class="metric-val">14.2M</div><div class="metric-label">Impressions</div></div>
+            <div><div class="metric-val">9.6x</div><div class="metric-label">ROAS</div></div>
+            <div><div class="metric-val">62K</div><div class="metric-label">Link Clicks</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-thumb case-thumb-2">
+          ☀️
+          <span class="case-thumb-label">Beauty &amp; Skincare</span>
+        </div>
+        <div class="case-body">
+          <div class="case-tags">
+            <span class="tag">YouTube</span>
+            <span class="tag">Instagram</span>
+            <span class="tag">Beauty Niche</span>
+          </div>
+          <div class="case-title">GlowLab — Serum Product Launch</div>
+          <p class="case-desc">Long-form YouTube reviews paired with Instagram unboxing content drove sell-out of 3 SKUs in 11 days. Built brand trust from zero to cult-favorite status.</p>
+          <div class="case-metrics">
+            <div><div class="metric-val">$2.4M</div><div class="metric-label">Revenue Attributed</div></div>
+            <div><div class="metric-val">11.8x</div><div class="metric-label">ROAS</div></div>
+            <div><div class="metric-val">41%</div><div class="metric-label">Repeat Purchase Rate</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-thumb case-thumb-3">
+          🍔
+          <span class="case-thumb-label">Food &amp; Beverage</span>
+        </div>
+        <div class="case-body">
+          <div class="case-tags">
+            <span class="tag">TikTok Food</span>
+            <span class="tag">Food Creators</span>
+            <span class="tag">UGC</span>
+          </div>
+          <div class="case-title">BiteBox — Subscription Box Launch</div>
+          <p class="case-desc">A UGC-first TikTok strategy featuring food creators made BiteBox's unboxing videos go viral, driving 22K new subscriptions in the first month alone.</p>
+          <div class="case-metrics">
+            <div><div class="metric-val">22K</div><div class="metric-label">New Subscribers</div></div>
+            <div><div class="metric-val">7.4x</div><div class="metric-label">ROAS</div></div>
+            <div><div class="metric-val">89M</div><div class="metric-label">Video Views</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-thumb case-thumb-4">
+          💄
+          <span class="case-thumb-label">D2C Beauty</span>
+        </div>
+        <div class="case-body">
+          <div class="case-tags">
+            <span class="tag">Instagram</span>
+            <span class="tag">Brand Ambassador</span>
+            <span class="tag">Affiliate</span>
+          </div>
+          <div class="case-title">Lumière — Ambassador Program Build-Out</div>
+          <p class="case-desc">Built a 120-creator ambassador network from scratch, complete with affiliate tracking, tiered incentives, and quarterly content calendars — recurring revenue engine still running today.</p>
+          <div class="case-metrics">
+            <div><div class="metric-val">120</div><div class="metric-label">Ambassadors Active</div></div>
+            <div><div class="metric-val">$680K</div><div class="metric-label">Monthly GMV</div></div>
+            <div><div class="metric-val">6.1x</div><div class="metric-label">ROAS</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="test-header fade-up">
+      <p class="section-eyebrow">Client Voices</p>
+      <h2 class="section-title">Trusted by Brands That<br/>Demand Results</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="test-quote">"ZarsAgency didn't just find us influencers — they found us the right ones. Our TikTok campaign ROAS was nearly 10x. The team is sharp, communicative, and obsessed with results."</p>
+        <div class="test-author">
+          <div class="author-avatar av-1">S</div>
+          <div>
+            <div class="author-name">Sofia Reyes</div>
+            <div class="author-role">CMO, Urban Sole</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="test-quote">"We sold out in 11 days. Eleven. I've worked with three other agencies before Zars and nothing came close to this. They understand the creator economy in a way that's genuinely rare."</p>
+        <div class="test-author">
+          <div class="author-avatar av-2">A</div>
+          <div>
+            <div class="author-name">Amara Osei</div>
+            <div class="author-role">Founder, GlowLab</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="test-quote">"The ambassador program they built is our best-performing acquisition channel — and it's been running for 14 months. ZarsAgency built us an asset, not just a campaign."</p>
+        <div class="test-author">
+          <div class="author-avatar av-3">J</div>
+          <div>
+            <div class="author-name">Jamie Chen</div>
+            <div class="author-role">Head of Growth, Lumière</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <p class="section-eyebrow">Ready to Grow?</p>
+    <h2 class="section-title">Let's Build Something<br/><span style="color:var(--violet-light)">That Actually Works</span></h2>
+    <p class="section-sub">Book a free 30-minute strategy call. We'll audit your current marketing, identify your ideal creator profile, and outline a campaign plan — no commitment required.</p>
+    <div class="cta-btns">
+      <a href="mailto:hello@zarsagency.com" class="btn-primary">Book Free Strategy Call</a>
+      <a href="mailto:hello@zarsagency.com" class="btn-outline">hello@zarsagency.com</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#home" class="nav-logo">Zars<span>Agency</span></a>
+        <p>We bridge the gap between brands and creators — building campaigns that earn attention, trust, and revenue.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Creator Discovery</a></li>
+          <li><a href="#services">Campaign Strategy</a></li>
+          <li><a href="#services">Performance Analytics</a></li>
+          <li><a href="#services">Paid Amplification</a></li>
+          <li><a href="#services">Ambassador Programs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#work">Case Studies</a></li>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#testimonials">Clients</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Platforms</h4>
+        <ul>
+          <li><a href="#">TikTok</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">Snapchat</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ZarsAgency. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+        <a href="#" class="social-link" aria-label="X / Twitter">𝕏</a>
+        <a href="#" class="social-link" aria-label="Instagram">ig</a>
+        <a href="#" class="social-link" aria-label="YouTube">yt</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── FIX 1: Intersection Observer for fade-up (excludes stat items which are above fold) ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ── FIX 2: Nav highlight using class instead of inline style (preserves nav-cta colors) ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }, { passive: true });
+
+    // ── FIX 7: Hamburger / mobile menu toggle ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close mobile menu when a link is clicked
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>
